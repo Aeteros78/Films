@@ -3,64 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Учет времени просмотра</title>
+    <title>Content Tracker Pro</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- Левая панель: Навигация -->
-    <aside class="sidebar">
-        <h2>Категории</h2>
-        <div class="category-container">
-            <div class="card active-card" data-category="welcome">Главная</div>
-            <div class="card" data-category="anime">Аниме</div>
-            <div class="card" data-category="films">Фильмы</div>
-            <div class="card" data-category="series">Сериалы</div>
-            <div class="card" data-category="shows">Шоу</div>
-            <div class="card" data-category="letsplays">Летсплеи</div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <h2 class="sidebar-title">Категории</h2>
+            <div class="menu-items">
+                <hr>
+                <div class="menu-item btn-all" onclick="showAllCards()">Все сразу</div>
+                <hr>
+                <div class="menu-item" onclick="showCategoryDetails('anime')">Аниме</div>
+                <div class="menu-item" onclick="showCategoryDetails('films')">Фильмы</div>
+                <div class="menu-item" onclick="showCategoryDetails('series')">Сериалы</div>
+                <div class="menu-item" onclick="showCategoryDetails('shows')">Шоу</div>
+                <div class="menu-item" onclick="showCategoryDetails('letsplays')">Летсплеи</div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div id="cards-view">
+                <h1 id="view-title">Моя статистика</h1>
+                <div class="cards-grid" id="cards-grid"></div>
+            </div>
+
+            <div id="table-view" class="hidden">
+                <div class="table-scroll-wrapper">
+                    <div class="table-container">
+                        <h2 id="table-title">Категория</h2>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Название</th><th>Серий</th><th>Длит.</th><th>Мин.</th><th>Часы</th><th>Рейтинг</th><th>Сюжет</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="stats-sidebar">
+            <div class="stats-card total">
+                <h3>Всего просмотрено</h3>
+                <div id="total-time-all">0 ч. 0 мин.</div>
+            </div>
+            <div class="stats-card">
+                <h3>Статистика категорий</h3>
+                <div id="stats-list"></div>
+            </div>
+            <div class="stats-card">
+                <h3>Таймлайн</h3>
+                <div class="chart-controls">
+                    <button onclick="updateChart('hours')">Часы</button>
+                    <button onclick="updateChart('days')">Сутки</button>
+                    <button onclick="updateChart('years')">Годы</button>
+                </div>
+                <canvas id="statsChart"></canvas>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Футер с раскрывающейся панелью -->
+    <footer class="achievements-footer">
+        <div class="achievements-header" onclick="toggleAchievements()">
+            <span class="achievements-title">🏆 Достижения</span>
+            <span id="ach-arrow" class="ach-arrow">▼</span>
         </div>
-    </aside>
-
-    <!-- Правая панель: Контент и Калькулятор -->
-    <main class="content-panel">
-        <!-- Приветственный экран -->
-        <section id="welcome-screen" class="active-section">
-            <h1>Добро пожаловать!</h1>
-            <p>Выберите категорию слева, чтобы увидеть список тайтлов.</p>
-            <p>Калькулятор времени всегда активен справа.</p>
-        </section>
-
-        <!-- Таблица данных -->
-        <section id="table-section" class="hidden-section">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 id="current-category-title"></h3>
+        <div id="achievements-content" class="achievements-content">
+            <div id="achievements-container">
+                <!-- Сюда через JS вставим ВСЕ секции ачивок -->
             </div>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Название</th>
-                            <th>Серий</th>
-                            <th>Длит. серии</th>
-                            <th>Минут</th>
-                            <th>Часов</th>
-                            <th>Рейтинг</th>
-                            <th>Сюжет</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body"></tbody>
-                </table>
-            </div>
-        </section>
+        </div>
+    </footer>
 
-        <!-- Панель калькулятора (всегда видна) -->
-        <section id="calculator-section">
-            <h3>📊 Калькулятор времени</h3>
-            <div id="time-stats"></div>
-            <canvas id="timeChart"></canvas>
-        </section>
-    </main>
+    <div id="modal" class="modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 id="modal-title">Сюжет</h3>
+            <p id="modal-text"></p>
+            <button class="close-btn" onclick="closeModal()">Закрыть</button>
+        </div>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
