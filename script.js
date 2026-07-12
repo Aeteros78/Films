@@ -232,7 +232,10 @@ function initChart(unit) {
 }
 
 function updateChart(unit) { initChart(unit); }
-function openPlot(text) { document.getElementById('modal-text').innerText = text; document.getElementById('modal').style.display = 'flex'; }
+function openPlot(text) { 
+    document.getElementById('modal-text').innerHTML = text; // Используем innerHTML
+    document.getElementById('modal').style.display = 'flex'; 
+}
 function closeModal() { document.getElementById('modal').style.display = 'none'; }
 function toggleAchievements() {
     var footer = document.querySelector('.achievements-footer');
