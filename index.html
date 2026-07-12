@@ -1,1 +1,46 @@
-111
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учет времени просмотра</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Мой медиапланировщик</h1>
+    </header>
+
+    <!-- Карточки категорий -->
+    <div class="category-container">
+        <div class="card active-card" data-category="anime">Аниме</div>
+        <div class="card" data-category="films">Фильмы</div>
+        <div class="card" data-category="series">Сериалы</div>
+        <div class="card" data-category="shows">Шоу</div>
+        <div class="card" data-category="letsplays">Летсплеи</div>
+    </div>
+
+    <!-- Скрытое меню для остальных категорий -->
+    <div id="hidden-menu" class="hidden-menu">
+        <span onclick="showCategory('films')">Фильмы</span>
+        <span onclick="showCategory('series')">Сериалы</span>
+        <span onclick="showCategory('shows')">Шоу</span>
+        <span onclick="showCategory('letsplays')">Летсплеи</span>
+    </div>
+
+    <!-- Контейнер контента -->
+    <main id="content-area">
+        <!-- Таблица будет вставлена сюда скриптом -->
+    </main>
+
+    <!-- Калькулятор -->
+    <section id="calculator-section" style="display:none; padding: 20px; background: #f4f4f4; margin-top: 20px; border-radius: 8px;">
+        <h2>Калькулятор времени</h2>
+        <div id="time-stats"></div>
+        <canvas id="timeChart" width="400" height="200"></canvas>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
