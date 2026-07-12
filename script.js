@@ -1,156 +1,20 @@
-// 1. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+// 1. ИМПОРТ ДАННЫХ (Все данные теперь в папке data/)
+import { animeData } from './data/anime.js';
+import { filmsData } from './data/films.js';
+import { seriesData } from './data/series.js';
+import { showsData } from './data/shows.js';
+import { letsplaysData } from './data/letsplays.js';
+import { achievementSets } from './data/achievements.js';
+
+// 2. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 var myChart = null;
 
 var database = {
-    anime: {
-        title: "Аниме",
-        img: "img/anime.webp",
-        data: [
-            { name: "Наруто", eps: 220, dur: 24, rate: 8.5, plot: "История о ниндзя..." },
-            { name: "Ван Пис", eps: 1000, dur: 22, rate: 9.0, plot: "Приключения..." }
-        ]
-    },
-    films: {
-        title: "Фильмы",
-        img: "img/films.jpg",
-        data: [
-            { name: "Начало", eps: 1, dur: 148, rate: 8.8, plot: "Сны..." },
-            { name: "Мусор", eps: 1, dur: 90, rate: 4.0, plot: "Пусто..." }
-        ]
-    },
-    series: {
-        title: "Сериалы",
-        img: "img/serials.jpg",
-        data: [
-            { name: "Во все тяжкие", eps: 62, dur: 47, rate: 9.5, plot: "Химия..." }
-        ]
-    },
-    shows: {
-        title: "Шоу",
-        img: "img/shows.webp",
-        data: [
-            { name: "Голос", eps: 10, dur: 60, rate: 7.0, plot: "Музыка..." }
-        ]
-    },
-    letsplays: {
-        title: "Летсплеи",
-        img: "img/kuplinov.jpg",
-        data: [
-            { name: "Minecraft", eps: 50, dur: 30, rate: 8.0, plot: "Выживание..." }
-        ]
-    }
-};
-
-// РУЧНОЙ СПИСОК ВСЕХ АЧИВОК (Цвета и формы ПЕРЕМЕШАНЫ вручную для каждой категории)
-var achievementSets = {
-    global: [
-        { m: 10,    name: "Старт",      shape: "shape-circle",   color: "color-1" },
-        { m: 25,    name: "Зритель",    shape: "shape-diamond",  color: "color-2" },
-        { m: 50,    name: "Любитель",  shape: "shape-hexagon",  color: "color-3" },
-        { m: 100,   name: "Фанат",     shape: "shape-circle",   color: "color-4" },
-        { m: 250,   name: "Знаток",    shape: "shape-diamond",  color: "color-1" },
-        { m: 500,   name: "Мастер",    shape: "shape-hexagon",  color: "color-2" },
-        { m: 1000,  name: "Эксперт",   shape: "shape-circle",   color: "color-3" },
-        { m: 2500,  name: "Гурман",    shape: "shape-diamond",  color: "color-4" },
-        { m: 5000,  name: "Гений",     shape: "shape-hexagon",  color: "color-1" },
-        { m: 10000, name: "Легенда",   shape: "shape-circle",   color: "color-2" },
-        { m: 25000, name: "Титан",     shape: "shape-diamond",  color: "color-3" },
-        { m: 50000, name: "Бог",       shape: "shape-hexagon",  color: "color-4" },
-        { m: 100000,name: "Миф",       shape: "shape-circle",   color: "color-1" },
-        { m: 250000,name: "Эпоха",     shape: "shape-diamond",  color: "color-2" },
-        { m: 500000,name: "Вечность",  shape: "shape-hexagon",  color: "color-3" },
-        { m: 1000000,name: "Абсолют", shape: "shape-circle",   color: "color-4" }
-    ],
-    anime: [
-        { m: 10,    name: "Отаку I",   shape: "shape-hexagon",  color: "color-3" },
-        { m: 25,    name: "Отаку II",  shape: "shape-circle",   color: "color-1" },
-        { m: 50,    name: "Сенпай",    shape: "shape-diamond",  color: "color-4" },
-        { m: 100,   name: "Ками",      shape: "shape-hexagon",  color: "color-2" },
-        { m: 250,   name: "Ниндзя",    shape: "shape-circle",   color: "color-3" },
-        { m: 500,   name: "Шиноби",    shape: "shape-diamond",  color: "color-1" },
-        { m: 1000,  name: "Хикари",    shape: "shape-hexagon",  color: "color-4" },
-        { m: 2500,  name: "Аниме-Бог", shape: "shape-circle",   color: "color-2" },
-        { m: 5000,  name: "Тайтл",     shape: "shape-diamond",  color: "color-3" },
-        { m: 10000, name: "Мастер",    shape: "shape-hexagon",  color: "color-1" },
-        { m: 25000, name: "Легенда",   shape: "shape-circle",   color: "color-4" },
-        { m: 50000, name: "Олимп",    shape: "shape-diamond",  color: "color-2" },
-        { m: 100000,name: "Миф",       shape: "shape-hexagon",  color: "color-3" },
-        { m: 250000,name: "Вечность",  shape: "shape-circle",   color: "color-1" },
-        { m: 500000,name: "Бессмертный",shape: "shape-diamond",  color: "color-4" },
-        { m: 1000000,name: "Абсолют",  shape: "shape-hexagon",  color: "color-2" }
-    ],
-    films: [
-        { m: 10,    name: "Киноман I", shape: "shape-diamond",  color: "color-4" },
-        { m: 25,    name: "Киноман II",shape: "shape-circle",   color: "color-1" },
-        { m: 50,    name: "Критик",    shape: "shape-hexagon",  color: "color-2" },
-        { m: 100,   name: "Режиссер",  shape: "shape-diamond",  color: "color-3" },
-        { m: 250,   name: "Актер",     shape: "shape-circle",   color: "color-4" },
-        { m: 500,   name: "Голливуд",  shape: "shape-hexagon",  color: "color-1" },
-        { m: 1000,  name: "Звезда",    shape: "shape-diamond",  color: "color-2" },
-        { m: 2500,  name: "Оскар",     shape: "shape-circle",   color: "color-3" },
-        { m: 5000,  name: "Легенда",   shape: "shape-hexagon",  color: "color-4" },
-        { m: 10000, name: "Мастер",    shape: "shape-diamond",  color: "color-1" },
-        { m: 25000, name: "Титан",     shape: "shape-circle",   color: "color-2" },
-        { m: 50000, name: "Бог",       shape: "shape-hexagon",  color: "color-3" },
-        { m: 100000,name: "Миф",       shape: "shape-diamond",  color: "color-4" },
-        { m: 250000,name: "Эпоха",     shape: "shape-circle",   color: "color-1" },
-        { m: 500000,name: "Вечность",  shape: "shape-hexagon",  color: "color-2" },
-        { m: 1000000,name: "Абсолют",  shape: "shape-diamond",  color: "color-3" }
-    ],
-    series: [
-        { m: 10,    name: "Серийный I",shape: "shape-hexagon",  color: "color-2" },
-        { m: 25,    name: "Серийный II",shape: "shape-circle",   color: "color-4" },
-        { m: 50,    name: "Марафонец", shape: "shape-diamond",  color: "color-1" },
-        { m: 100,   name: "Binge",     shape: "shape-hexagon",  color: "color-3" },
-        { m: 250,   name: "Эксперт",   shape: "shape-circle",   color: "color-2" },
-        { m: 500,   name: "Мастер",   shape: "shape-diamond",  color: "color-4" },
-        { m: 1000,  name: "Легенда",   shape: "shape-hexagon",  color: "color-1" },
-        { m: 2500,  name: "Титан",     shape: "shape-circle",   color: "color-3" },
-        { m: 5000,  name: "Бог",       shape: "shape-diamond",  color: "color-2" },
-        { m: 10000, name: "Миф",       shape: "shape-hexagon",  color: "color-4" },
-        { m: 25000, name: "Эпоха",     shape: "shape-circle",   color: "color-1" },
-        { m: 50000, name: "Вечность",  shape: "shape-diamond",  color: "color-3" },
-        { m: 100000,name: "Абсолют",   shape: "shape-hexagon",  color: "color-2" },
-        { m: 250000,name: "Бессмертный",shape: "shape-circle",   color: "color-4" },
-        { m: 500000,name: "Олимп",     shape: "shape-diamond",  color: "color-1" },
-        { m: 1000000,name: "Вселенная",shape: "shape-hexagon",  color: "color-3" }
-    ],
-    shows: [
-        { m: 10,    name: "Зритель I",  shape: "shape-diamond",  color: "color-2" },
-        { m: 25,    name: "Зритель II",shape: "shape-hexagon",  color: "color-4" },
-        { m: 50,    name: "Шоумен",   shape: "shape-circle",   color: "color-1" },
-        { m: 100,   name: "Звезда",   shape: "shape-diamond",  color: "color-3" },
-        { m: 250,   name: "Мастер",   shape: "shape-hexagon",  color: "color-4" },
-        { m: 500,   name: "Титан",    shape: "shape-circle",   color: "color-2" },
-        { m: 1000,  name: "Легенда",   shape: "shape-diamond",  color: "color-1" },
-        { m: 2500,  name: "Бог",       shape: "shape-hexagon",  color: "color-3" },
-        { m: 5000,  name: "Миф",       shape: "shape-circle",   color: "color-4" },
-        { m: 10000, name: "Эпоха",     shape: "shape-diamond",  color: "color-2" },
-        { m: 25000, name: "Вечность",  shape: "shape-hexagon",  color: "color-1" },
-        { m: 50000, name: "Абсолют",   shape: "shape-circle",   color: "color-3" },
-        { m: 100000,name: "Бессмертный",shape: "shape-diamond",  color: "color-4" },
-        { m: 250000,name: "Олимп",     shape: "shape-hexagon",  color: "color-1" },
-        { m: 500000,name: "Вселенная", shape: "shape-circle",   color: "color-2" },
-        { m: 1000000,name: "Божество", shape: "shape-diamond",  color: "color-3" }
-    ],
-    letsplays: [
-        { m: 10,    name: "Геймер I",  shape: "shape-hexagon",  color: "color-4" },
-        { m: 25,    name: "Геймер II",shape: "shape-circle",   color: "color-1" },
-        { m: 50,    name: "Стример",   shape: "shape-diamond",  color: "color-2" },
-        { m: 100,   name: "Профи",    shape: "shape-hexagon",  color: "color-3" },
-        { m: 250,   name: "Мастер",   shape: "shape-circle",   color: "color-4" },
-        { m: 500,   name: "Легенда",   shape: "shape-diamond",  color: "color-1" },
-        { m: 1000,  name: "Титан",     shape: "shape-hexagon",  color: "color-2" },
-        { m: 2500,  name: "Бог",       shape: "shape-circle",   color: "color-3" },
-        { m: 5000,  name: "Миф",       shape: "shape-diamond",  color: "color-4" },
-        { m: 10000, name: "Эпоха",     shape: "shape-hexagon",  color: "color-1" },
-        { m: 25000, name: "Вечность",  shape: "shape-circle",   color: "color-2" },
-        { m: 50000, name: "Абсолют",   shape: "shape-diamond",  color: "color-3" },
-        { m: 100000,name: "Бессмертный",shape: "shape-hexagon",  color: "color-4" },
-        { m: 250000,name: "Олимп",     shape: "shape-circle",   color: "color-1" },
-        { m: 500000,name: "Вселенная", shape: "shape-diamond",  color: "color-2" },
-        { m: 1000000,name: "Бог Игр",  shape: "shape-hexagon",  color: "color-3" }
-    ]
+    anime: animeData,
+    films: filmsData,
+    series: seriesData,
+    shows: showsData,
+    letsplays: letsplaysData
 };
 
 var cardsGrid = document.getElementById('cards-grid');
@@ -161,56 +25,77 @@ var tableTitle = document.getElementById('table-title');
 var totalTimeAll = document.getElementById('total-time-all');
 var statsList = document.getElementById('stats-list');
 var catAchContainer = document.getElementById('achievements-container');
+var sidebarCategories = document.getElementById('sidebar-categories');
 
-function toggleAchievements() {
-    var footer = document.querySelector('.achievements-footer');
-    if (footer) footer.classList.toggle('expanded');
-}
+// 3. ОСНОВНЫЕ ФУНКЦИИ
 
 function init() {
     renderCards();
     updateGlobalStats();
-    
-    if (catAchContainer) {
-        catAchContainer.innerHTML = ''; 
+    renderSidebar(); 
+    renderAchievements(); 
+}
 
-        // 1. Глобальные
-        var globalSection = document.createElement('div');
-        globalSection.className = 'achievements-section';
-        globalSection.innerHTML = '<h3 class="ach-title">🏆 Общие достижения</h3><div class="achievements-row" id="grid-global"></div>';
-        catAchContainer.appendChild(globalSection);
+function renderSidebar() {
+    if (!sidebarCategories) return;
+    sidebarCategories.innerHTML = ''; 
+
+    // ИСПОЛЬЗУЕМ let вместо var для key
+    for (let key in database) {
+        let category = database[key];
+        let btn = document.createElement('div');
+        btn.className = 'menu-item';
+        btn.innerText = category.title;
         
-        renderAchItems(document.getElementById('grid-global'), achievementSets.global, calculateGlobalHours());
+        btn.onclick = function() {
+            var allButtons = sidebarCategories.querySelectorAll('.menu-item');
+            allButtons.forEach(function(b) {
+                b.classList.remove('active');
+            });
 
-        // 2. Категории
-        for (var key in database) {
-            var section = document.createElement('div');
-            section.className = 'achievements-section';
-            section.innerHTML = '<h3 class="ach-title">🏆 ' + database[key].title + '</h3><div class="achievements-row" id="grid-' + key + '"></div>';
-            catAchContainer.appendChild(section);
-            
-            var grid = document.getElementById('grid-' + key);
-            var catHours = calculateMins(database[key].data) / 60;
-            
-            renderAchItems(grid, achievementSets[key], catHours);
-        }
+            btn.classList.add('active');
+            showCategoryDetails(key);
+        };
+        
+        sidebarCategories.appendChild(btn);
+    }
+}
+
+function renderAchievements() {
+    if (!catAchContainer) return;
+    catAchContainer.innerHTML = ''; 
+
+    var globalSection = document.createElement('div');
+    globalSection.className = 'achievements-section';
+    globalSection.innerHTML = '<h3 class="ach-title">🏆 Общие достижения</h3><div class="achievements-row" id="grid-global"></div>';
+    catAchContainer.appendChild(globalSection);
+    
+    renderAchItems(document.getElementById('grid-global'), achievementSets.global, calculateGlobalHours());
+
+    // ИСПОЛЬЗУЕМ let вместо var для key
+    for (let key in database) {
+        var section = document.createElement('div');
+        section.className = 'achievements-section';
+        section.innerHTML = '<h3 class="ach-title">🏆 ' + database[key].title + '</h3><div class="achievements-row" id="grid-' + key + '"></div>';
+        catAchContainer.appendChild(section);
+        
+        var grid = document.getElementById('grid-' + key);
+        var catHours = calculateMins(database[key].data) / 60;
+        
+        renderAchItems(grid, achievementSets[key], catHours);
     }
 }
 
 function renderAchItems(container, achList, currentHours) {
     if (!container || !achList) return;
-    for (var i = 0; i < achList.length; i++) {
+    for (let i = 0; i < achList.length; i++) {
         var ach = achList[i];
         var div = document.createElement('div');
         var isUnlocked = currentHours >= ach.m;
         
-        // Берем значения напрямую из объекта (они уже перемешаны вручную выше)
-        var shape = ach.shape;
-        var color = ach.color;
-        
-        var classList = 'achievement ' + shape;
+        var classList = 'achievement ' + ach.shape;
         if (isUnlocked) {
-            classList += ' unlocked ' + color;
+            classList += ' unlocked ' + ach.color;
         }
         
         div.className = classList;
@@ -223,10 +108,11 @@ function renderAchItems(container, achList, currentHours) {
 function renderCards() {
     if (!cardsGrid) return;
     cardsGrid.innerHTML = '';
-    for (var key in database) {
-        var val = database[key];
-        var mins = calculateMins(val.data);
-        var card = document.createElement('div');
+    // ИСПОЛЬЗУЕМ let вместо var для key
+    for (let key in database) {
+        let val = database[key];
+        let mins = calculateMins(val.data);
+        let card = document.createElement('div');
         card.className = 'product-card';
         card.onclick = function() { showCategoryDetails(key); };
         card.innerHTML = '<img src="' + val.img + '" class="card-img" onerror="this.src=\'https://via.placeholder.com/150?text=No+Img\'">' +
@@ -240,17 +126,24 @@ function showCategoryDetails(key) {
     if (!cat) return;
     tableTitle.innerText = cat.title;
     tableBody.innerHTML = '';
-    for (var i = 0; i < cat.data.length; i++) {
-        var item = cat.data[i];
-        var m = item.eps * item.dur;
-        var r = item.rate;
-        var rowClass = 'row-high', rText = 'Обязательно';
+    for (let i = 0; i < cat.data.length; i++) {
+        let item = cat.data[i];
+        let m = item.eps * item.dur;
+        let r = item.rate;
+        let rowClass = 'row-high', rText = 'Обязательно';
         if (r < 4) { rowClass = 'row-low'; rText = 'Нежелательно'; }
         else if (r < 7) { rowClass = 'row-mid'; rText = 'Желательно'; }
-        tableBody.innerHTML += '<tr class="' + rowClass + '">' +
-            '<td>' + item.name + '</td><td>' + item.eps + '</td><td>' + item.dur + '</td>' +
-            '<td>' + m + '</td><td>' + (m/60).toFixed(1) + '</td><td>' + r + ' (' + rText + ')</td>' +
-            '<td class="plot-cell" onclick="openPlot(\'' + item.plot.replace(/'/g, "\\'") + '\')">' + item.plot + '</td></tr>';
+
+        var tr = document.createElement('tr');
+        tr.className = rowClass;
+        tr.innerHTML = '<td>' + item.name + '</td><td>' + item.eps + '</td><td>' + item.dur + '</td>' +
+                       '<td>' + m + '</td><td>' + (m/60).toFixed(1) + '</td><td>' + r + ' (' + rText + ')</td>' +
+                       '<td class="plot-cell">' + item.plot + '</td>';
+        
+        tr.querySelector('.plot-cell').onclick = function() {
+            openPlot(item.plot);
+        };
+        tableBody.appendChild(tr);
     }
     cardsView.classList.add('hidden');
     tableView.classList.remove('hidden');
@@ -259,14 +152,22 @@ function showCategoryDetails(key) {
 function showAllCards() {
     cardsView.classList.remove('hidden');
     tableView.classList.add('hidden');
+
+    if (sidebarCategories) {
+        var allButtons = sidebarCategories.querySelectorAll('.menu-item');
+        allButtons.forEach(function(b) {
+            b.classList.remove('active');
+        });
+    }
 }
 
 function updateGlobalStats() {
     var grandTotalMins = 0;
     if (statsList) statsList.innerHTML = '';
-    for (var key in database) {
-        var val = database[key];
-        var mins = calculateMins(val.data);
+    // ИСПОЛЬЗУЕМ let вместо var для key
+    for (let key in database) {
+        let val = database[key];
+        let mins = calculateMins(val.data);
         grandTotalMins += mins;
         if (statsList) {
             var row = document.createElement('div');
@@ -279,15 +180,18 @@ function updateGlobalStats() {
     initChart('hours');
 }
 
+// 4. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+
 function calculateGlobalHours() {
     var total = 0;
-    for (var key in database) total += calculateMins(database[key].data) / 60;
+    // ИСПОЛЬЗУЕМ let вместо var для key
+    for (let key in database) total += calculateMins(database[key].data) / 60;
     return total;
 }
 
 function calculateMins(data) { 
     var sum = 0;
-    for (var i = 0; i < data.length; i++) { sum += (data[i].eps * data[i].dur); }
+    for (let i = 0; i < data.length; i++) { sum += (data[i].eps * data[i].dur); }
     return sum;
 }
 
@@ -303,9 +207,11 @@ function initChart(unit) {
     var ctx = document.getElementById('statsChart').getContext('2d');
     if (myChart) myChart.destroy();
     var labels = [];
-    for (var k in database) { labels.push(database[k].title); }
+    // ИСПОЛЬЗУЕМ let вместо var для key
+    for (let k in database) { labels.push(database[k].title); }
     var dataValues = [];
-    for (var k in database) {
+    // ИСПОЛЬЗУЕМ let вместо var для key
+    for (let k in database) {
         var m = calculateMins(database[k].data);
         if (unit === 'hours') dataValues.push(m / 60);
         else if (unit === 'days') dataValues.push(m / (60 * 24));
@@ -314,12 +220,31 @@ function initChart(unit) {
     myChart = new Chart(ctx, {
         type: 'bar',
         data: { labels: labels, datasets: [{ data: dataValues, backgroundColor: '#38bdf8', borderRadius: 5 }] },
-        options: { responsive: true, scales: { y: { grid: { color: '#334155' }, ticks: { color: '#fff' } }, x: { ticks: { color: '#fff' } } }, plugins: { legend: { display: false } } }
+        options: { 
+            responsive: true, 
+            scales: { 
+                y: { grid: { color: '#334155' }, ticks: { color: '#fff' } }, 
+                x: { ticks: { color: '#fff' } } 
+            }, 
+            plugins: { legend: { display: false } } 
+        }
     });
 }
 
 function updateChart(unit) { initChart(unit); }
 function openPlot(text) { document.getElementById('modal-text').innerText = text; document.getElementById('modal').style.display = 'flex'; }
 function closeModal() { document.getElementById('modal').style.display = 'none'; }
+function toggleAchievements() {
+    var footer = document.querySelector('.achievements-footer');
+    if (footer) footer.classList.toggle('expanded');
+}
+
+// 5. ПРИВЯЗКА К WINDOW
+window.showAllCards = showAllCards;
+window.showCategoryDetails = showCategoryDetails;
+window.toggleAchievements = toggleAchievements;
+window.updateChart = updateChart;
+window.openPlot = openPlot;
+window.closeModal = closeModal;
 
 init();

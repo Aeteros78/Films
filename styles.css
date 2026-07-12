@@ -120,3 +120,10 @@ body { margin: 0; background: var(--bg-color); color: var(--text-main); font-fam
 .modal-content { background: var(--card-bg); padding: 25px; border-radius: 12px; max-width: 400px; width: 85%; border: 1px solid var(--accent); }
 .close-btn { margin-top: 15px; padding: 8px; cursor: pointer; background: var(--accent); border: none; border-radius: 4px; width: 100%; }
 .hidden { display: none; }
+
+/* Стиль для активной кнопки в меню */
+.menu-item.active {
+    background-color: #38bdf8; /* Цвет под стать графику */
+    color: #0f172a;           /* Темный текст для контраста */
+    font-weight: bold;
+}
