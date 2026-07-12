@@ -7,38 +7,58 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Мой медиапланировщик</h1>
-    </header>
+    <!-- Левая панель: Навигация -->
+    <aside class="sidebar">
+        <h2>Категории</h2>
+        <div class="category-container">
+            <div class="card active-card" data-category="welcome">Главная</div>
+            <div class="card" data-category="anime">Аниме</div>
+            <div class="card" data-category="films">Фильмы</div>
+            <div class="card" data-category="series">Сериалы</div>
+            <div class="card" data-category="shows">Шоу</div>
+            <div class="card" data-category="letsplays">Летсплеи</div>
+        </div>
+    </aside>
 
-    <!-- Карточки категорий -->
-    <div class="category-container">
-        <div class="card active-card" data-category="anime">Аниме</div>
-        <div class="card" data-category="films">Фильмы</div>
-        <div class="card" data-category="series">Сериалы</div>
-        <div class="card" data-category="shows">Шоу</div>
-        <div class="card" data-category="letsplays">Летсплеи</div>
-    </div>
+    <!-- Правая панель: Контент и Калькулятор -->
+    <main class="content-panel">
+        <!-- Приветственный экран -->
+        <section id="welcome-screen" class="active-section">
+            <h1>Добро пожаловать!</h1>
+            <p>Выберите категорию слева, чтобы увидеть список тайтлов.</p>
+            <p>Калькулятор времени всегда активен справа.</p>
+        </section>
 
-    <!-- Скрытое меню для остальных категорий -->
-    <div id="hidden-menu" class="hidden-menu">
-        <span onclick="showCategory('films')">Фильмы</span>
-        <span onclick="showCategory('series')">Сериалы</span>
-        <span onclick="showCategory('shows')">Шоу</span>
-        <span onclick="showCategory('letsplays')">Летсплеи</span>
-    </div>
+        <!-- Таблица данных -->
+        <section id="table-section" class="hidden-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 id="current-category-title"></h3>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Серий</th>
+                            <th>Длит. серии</th>
+                            <th>Минут</th>
+                            <th>Часов</th>
+                            <th>Рейтинг</th>
+                            <th>Сюжет</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+        </section>
 
-    <!-- Контейнер контента -->
-    <main id="content-area">
-        <!-- Таблица будет вставлена сюда скриптом -->
+        <!-- Панель калькулятора (всегда видна) -->
+        <section id="calculator-section">
+            <h3>📊 Калькулятор времени</h3>
+            <div id="time-stats"></div>
+            <canvas id="timeChart"></canvas>
+        </section>
     </main>
-
-    <!-- Калькулятор -->
-    <section id="calculator-section" style="display:none; padding: 20px; background: #f4f4f4; margin-top: 20px; border-radius: 8px;">
-        <h2>Калькулятор времени</h2>
-        <div id="time-stats"></div>
-        <canvas id="timeChart" width="400" height="200"></canvas>
-    </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
