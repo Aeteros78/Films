@@ -13,15 +13,14 @@
 body { margin: 0; background: var(--bg-color); color: var(--text-main); font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 .app-container { display: flex; flex: 1; overflow: hidden; }
 
-/* SIDEBAR & MAIN */
+/* SIDEBAR */
 .sidebar { width: 180px; background: var(--sidebar-color); padding: 15px; border-right: 2px solid var(--border); }
 .sidebar-title { font-size: 1.1rem; color: var(--accent); }
 .menu-item { padding: 8px; cursor: pointer; border-radius: 4px; transition: 0.2s; font-size: 0.9rem; margin-bottom: 4px; }
 .menu-item:hover { background: var(--accent); color: #000; }
 .btn-all { background: rgba(56, 189, 248, 0.2); border: 1px solid var(--accent); font-weight: bold; color: var(--accent); }
-.btn-all:hover { background: var(--accent); color: #000; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 10px 0; }
 
+/* MAIN */
 .main-content { flex: 1; padding: 20px; overflow-y: auto; }
 .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
 .product-card { background: var(--card-bg); border-radius: 10px; overflow: hidden; cursor: pointer; border: 1px solid var(--border); transition: 0.3s; }
@@ -32,7 +31,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 10px 0; }
 .card-body .time-label { color: var(--accent); font-size: 0.8rem; }
 
 /* TABLE */
-.table-scroll-wrapper { max-height: 400px; overflow-y: auto; border: 2px solid var(--border); border-radius: 8px; margin-bottom: 10px; }
+.table-scroll-wrapper { max-height: 435px; overflow-y: auto; border: 2px solid var(--border); border-radius: 8px; margin-bottom: 10px; }
 .table-container { padding: 5px; }
 .styled-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
 .styled-table th { position: sticky; top: 0; background: #334155; padding: 10px; border: 2px solid var(--border); z-index: 10; }
@@ -41,7 +40,6 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 10px 0; }
 .row-mid { background-color: var(--rate-mid) !important; }
 .row-high { background-color: var(--rate-high) !important; }
 .plot-cell { max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
-.back-button { padding: 8px 15px; cursor: pointer; background: var(--accent); border: none; border-radius: 4px; }
 
 /* STATS */
 .stats-sidebar { width: 280px; background: var(--sidebar-color); padding: 15px; border-left: 2px solid var(--border); overflow-y: auto; }
@@ -57,72 +55,65 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 10px 0; }
 /* FOOTER & ACHIEVEMENTS */
 .achievements-footer { 
     background: #1e293b; 
+    display: flex; 
+    flex-direction: column; 
+    padding: 0; 
     border-top: 2px solid var(--accent);
-    transition: height 0.4s ease; /* Плавное раскрытие */
-    height: 45px; /* Высота только заголовка */
-    overflow: hidden;
+    height: 45px; 
+    overflow: hidden; 
+    transition: height 0.4s ease;
 }
+.achievements-footer.expanded { height: 520px; overflow-y: auto; padding-left: 15px; padding-right: 15px; }
+.achievements-header { height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; }
+.achievements-title { font-size: 0.9rem; font-weight: bold; color: var(--accent); }
+.ach-arrow { margin-left: 10px; transition: transform 0.3s ease; }
+.achievements-footer.expanded .ach-arrow { transform: rotate(180deg); }
 
-.achievements-footer.expanded {
-    height: 545px; /* Высота при раскрытии (можно подстроить) */
-    overflow-y: auto;
-}
+.achievements-content { padding: 0; width: 100%; }
+.achievements-section { width: 100%; box-sizing: border-box; }
+.achievements-section h3 { font-size: 0.75rem; color: var(--accent); margin: 0; }
+.achievements-row { display: flex; flex-wrap: wrap; gap: 12px; padding: 6px 0; justify-content: space-between; }
 
-.achievements-header {
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    background: #1e293b;
-    user-select: none;
-}
-
-.achievements-title {
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: var(--accent);
-}
-
-.ach-arrow {
-    margin-left: 10px;
-    transition: transform 0.3s ease;
-}
-
-.achievements-footer.expanded .ach-arrow {
-    transform: rotate(180deg); /* Поворот стрелочки */
-}
-
-.achievements-content {
-    padding: 15px 25px;
-}
-
-.achievements-section { min-width: 0; margin-bottom: 20px; }
-.achievements-section h3 { font-size: 0.75rem; color: var(--accent); margin: 0 0 8px 0; }
-
-.achievements-row { display: flex; flex-wrap: wrap; gap: 40px; }
-
+/* ACHIEVEMENT CORE */
 .achievement { 
     width: 50px; height: 50px; 
     display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    font-size: 0.5rem; text-align: center; 
-    border-radius: 6px; border: 1.5px solid #475569; 
-    opacity: 0.2; color: #fff; padding: 3px; 
-    box-sizing: border-box; flex-shrink: 0;
+    font-size: 0.45rem; text-align: center; 
+    border-radius: 6px; border: 1.5px solid #475569;
+    opacity: 0.2; color: #fff; padding: 2px; 
+    box-sizing: border-box; flex-shrink: 0; 
 }
-.achievement span.name { font-weight: bold; display: block; margin-bottom: 2px; line-height: 1; }
-.achievement span.cond { font-size: 0.45rem; opacity: 0.8; display: block; }
 
-.shape-circle { border-radius: 50%; }
+.achievement span.name { 
+    font-weight: bold; 
+    display: block; 
+    line-height: 1.1; 
+    margin-bottom: 2px; 
+}
+
+/* ТЕКСТ УСЛОВИЯ: УВЕЛИЧЕН И ПО ЦЕНТРУ */
+.achievement span.cond { 
+    font-size: 0.55rem; /* Чуть больше */
+    font-weight: bold;
+    opacity: 1;
+    display: block; 
+    line-height: 1; 
+    text-align: center; /* По центру */
+    width: 100%;
+}
+
+/* SHAPES */
+.shape-circle { border-radius: 50% !important; }
 .shape-diamond { transform: rotate(45deg); }
 .shape-diamond span { transform: rotate(-45deg); }
 .shape-hexagon { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
 
-.achievement.unlocked { opacity: 1; border-width: 2px; }
-.achievement.unlocked.color-1 { background: #ef4444; border-color: #fca5a5; box-shadow: 0 0 5px #ef4444; }
-.achievement.unlocked.color-2 { background: #f59e0b; border-color: #fcd34d; box-shadow: 0 0 5px #f59e0b; }
-.achievement.unlocked.color-3 { background: #10b981; border-color: #6ee7b7; box-shadow: 0 0 5px #10b981; }
-.achievement.unlocked.color-4 { background: #8b5cf6; border-color: #c4b5fd; box-shadow: 0 0 5px #8b5cf6; }
+/* COLORS - С !important ДЛЯ ГАРАНТИИ */
+.achievement.unlocked { opacity: 1 !important; border-width: 2px !important; }
+.achievement.unlocked.color-1 { background: #ef4444 !important; border-color: #fca5a5 !important; box-shadow: 0 0 10px #ef4444; }
+.achievement.unlocked.color-2 { background: #f59e0b !important; border-color: #fcd34d !important; box-shadow: 0 0 10px #f59e0b; }
+.achievement.unlocked.color-3 { background: #10b981 !important; border-color: #6ee7b7 !important; box-shadow: 0 0 10px #10b981; }
+.achievement.unlocked.color-4 { background: #8b5cf6 !important; border-color: #c4b5fd !important; box-shadow: 0 0 10px #8b5cf6; }
 
 /* MODAL */
 .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; }
