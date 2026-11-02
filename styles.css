@@ -171,7 +171,6 @@ body {
     background: var(--sidebar-color); 
     padding: 15px; 
     border-left: 2px solid var(--border); 
-    overflow-y: auto; 
 }
 
 .stats-card { 
@@ -234,8 +233,7 @@ body {
 }
 
 .achievements-footer.expanded { 
-    height: 520px; 
-    overflow-y: auto; 
+    height: 540px; 
     padding-left: 15px; 
     padding-right: 15px; 
 }
@@ -277,38 +275,58 @@ body {
 .achievements-section h3 { 
     font-size: 0.75rem; 
     color: var(--accent); 
-    margin: 0; 
+    margin: 0 0 5px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .achievements-row { 
     display: flex; 
     flex-wrap: wrap; 
-    gap: 12px; 
+    gap: 10px; 
     padding: 6px 0; 
-    justify-content: space-between; 
+    justify-content: space-between;
 }
 
 /* ACHIEVEMENT CORE */
 .achievement { 
-    width: 50px; height: 50px; 
-    display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    font-size: 0.45rem; text-align: center; 
-    border-radius: 6px; border: 1.5px solid #475569;
-    opacity: 0.2; color: #fff; padding: 2px; 
-    box-sizing: border-box; flex-shrink: 0; 
+    width: 60px; /* Чуть шире, чтобы текст помещался */
+    height: 50px; /* Чуть выше */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 0.6rem; 
+    text-align: center; 
+    border-radius: 6px; 
+    border: 1.5px solid #475569;
+    opacity: 0.3; 
+    color: #fff; 
+    padding: 4px; 
+    box-sizing: border-box; 
+    flex-shrink: 0; 
+    position: relative;
+    transition: all 0.3s ease;
 }
 
 .achievement span.name { 
     font-weight: bold; 
     display: block; 
     line-height: 1.1; 
-    margin-bottom: 2px; 
+    margin-bottom: 2px;
+    /* Обрезание длинных названий */
+    max-height: 2.2em; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .achievement span.cond { 
-    font-size: 0.55rem; 
+    font-size: 0.65rem; 
     font-weight: bold;
-    opacity: 1;
+    opacity: 0.9;
     display: block; 
     line-height: 1; 
     text-align: center; 
@@ -316,17 +334,63 @@ body {
 }
 
 /* SHAPES */
-.shape-circle { border-radius: 50% !important; }
-.shape-diamond { transform: rotate(45deg); }
-.shape-diamond span { transform: rotate(-45deg); }
-.shape-hexagon { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
+/* Круг */
+.shape-circle { 
+    border-radius: 50% !important; 
+}
 
-/* COLORS */
-.achievement.unlocked { opacity: 1 !important; border-width: 2px !important; }
-.achievement.unlocked.color-1 { background: #ef4444 !important; border-color: #fca5a5 !important; box-shadow: 0 0 10px #ef4444; }
-.achievement.unlocked.color-2 { background: #f59e0b !important; border-color: #fcd34d !important; box-shadow: 0 0 10px #f59e0b; }
-.achievement.unlocked.color-3 { background: #10b981 !important; border-color: #6ee7b7 !important; box-shadow: 0 0 10px #10b981; }
-.achievement.unlocked.color-4 { background: #8b5cf6 !important; border-color: #c4b5fd !important; box-shadow: 0 0 10px #8b5cf6; }
+/* Ромб: Поворачиваем весь блок, но текст внутри выравниваем обратно */
+.shape-diamond { 
+    transform: rotate(45deg); 
+    border-radius: 4px;
+}
+.shape-diamond span { 
+    transform: rotate(-45deg); 
+    display: block;
+}
+
+/* Шестиугольник: Используем clip-path. 
+   ВНИМАНИЕ: clip-path обрезает контент. 
+   Если текст не помещается, его нужно укорачивать в JS. */
+.shape-hexagon { 
+    border-radius: 12px; /* Скругленные углы */
+    /* Убираем clip-path, чтобы текст не обрезался */
+    clip-path: none;
+    border: 1.5px solid rgba(255, 255, 255, 0.2); /* Тонкая рамка для объема */
+}
+
+/* COLORS & STATES */
+/* Базовый стиль для разблокированных (цвета приходят из JS инлайн) */
+.achievement.unlocked { 
+    opacity: 1 !important; 
+    border-width: 2px !important; 
+    cursor: pointer;
+}
+
+/* Hover эффект для разблокированных */
+.achievement.unlocked:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+    z-index: 10;
+}
+
+/* Специфичный hover для ромба, чтобы не было странных артефактов с transform */
+.shape-diamond.unlocked:hover {
+    transform: rotate(45deg) scale(1.05);
+}
+.shape-diamond.unlocked:hover span {
+    transform: rotate(-45deg);
+}
+
+/* Заблокированные достижения */
+.achievement.locked {
+    background: #333 !important;
+    border-color: #555 !important;
+    color: #888 !important;
+    box-shadow: none !important;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 /* MODAL (NEW & IMPROVED) */
 .modal { 

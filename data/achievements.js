@@ -1,112 +1,173 @@
 // data/achievements.js
 
+/**
+ * Генератор цветов для достижений.
+ * Возвращает объект с CSS-свойствами для градиента и свечения.
+ * 
+ * @param {number} index - Индекс достижения (для создания последовательности оттенков)
+ * @param {string} baseHue - Базовый оттенок (0-360). Можно передать случайное число или фиксированное.
+ * @returns {object} { background: string, boxShadow: string, borderColor: string }
+ */
+function generateAchievementColor(index, baseHue = null) {
+    // Если baseHue не передан, генерируем случайный оттенок
+    // Иначе используем переданный, но сдвигаем его для каждого элемента
+    const hue = baseHue !== null ? (baseHue + index * 15) % 360 : Math.floor(Math.random() * 360);
+    
+    // Насыщенность 70-90% для ярких цветов
+    const saturation = 70 + Math.floor(Math.random() * 20);
+    
+    // Светлота 50-60% для читаемости белого текста
+    const lightness = 50 + Math.floor(Math.random() * 10);
+    
+    // Основной цвет (HSL)
+    const mainColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    
+    // Цвет для градиента (чуть темнее/светлее)
+    const gradientEnd = `hsl(${(hue + 30) % 360}, ${saturation}%, ${Math.max(30, lightness - 15)}%)`;
+    
+    // Цвет для рамки (чуть светлее основного)
+    const borderColor = `hsl(${hue}, ${saturation}%, ${Math.min(80, lightness + 15)}%)`;
+    
+    // Цвет для свечения (с прозрачностью)
+    const glowColor = `hsla(${hue}, ${saturation}%, ${lightness}%, 0.6)`;
+
+    return {
+        background: `linear-gradient(135deg, ${mainColor}, ${gradientEnd})`,
+        boxShadow: `0 4px 15px ${glowColor}`,
+        borderColor: borderColor
+    };
+}
+
+// Вспомогательная функция для создания объекта достижения с сгенерированным цветом
+function createAchievement(m, name, shape, baseHue = null) {
+    // Генерируем уникальный индекс на основе m (чтобы цвета были стабильными при перезагрузке)
+    // Используем простое хеширование, чтобы одно и то же m давало один и тот же цвет
+    const index = m % 360; 
+    
+    const colors = generateAchievementColor(index, baseHue);
+
+    return {
+        m,
+        name,
+        shape,
+        // Вместо строки "color-1" мы храним объект со стилями
+        style: colors
+    };
+}
+
 export const achievementSets = {
     global: [
-        { m: 10,    name: "Новичок",      shape: "shape-circle",   color: "color-1" },
-        { m: 25,    name: "Зритель",    shape: "shape-diamond",  color: "color-2" },
-        { m: 50,    name: "Любитель",  shape: "shape-hexagon",  color: "color-3" },
-        { m: 100,   name: "Фанат",     shape: "shape-circle",   color: "color-4" },
-        { m: 250,   name: "Знаток",    shape: "shape-diamond",  color: "color-1" },
-        { m: 500,   name: "Эксперт",    shape: "shape-hexagon",  color: "color-2" },
-        { m: 1000,  name: "Мастер",   shape: "shape-circle",   color: "color-3" },
-        { m: 2500,  name: "Гурман",    shape: "shape-diamond",  color: "color-4" },
-        { m: 5000,  name: "Гений",     shape: "shape-hexagon",  color: "color-1" },
-        { m: 10000, name: "Легенда",   shape: "shape-circle",   color: "color-2" },
-        { m: 25000, name: "Титан",     shape: "shape-diamond",  color: "color-3" },
-        { m: 50000, name: "Бог",       shape: "shape-hexagon",  color: "color-4" },
-        { m: 100000,name: "Миф",       shape: "shape-circle",   color: "color-1" },
-        { m: 250000,name: "Эпоха",     shape: "shape-diamond",  color: "color-2" },
-        { m: 500000,name: "Вечность",  shape: "shape-hexagon",  color: "color-3" },
-        { m: 1000000,name: "Абсолют", shape: "shape-circle",   color: "color-4" }
+        createAchievement(10, "Первый клик", "shape-circle"),
+        createAchievement(25, "Пульт в руках", "shape-diamond"),
+        createAchievement(50, "Марафонец", "shape-hexagon"),
+        createAchievement(100, "Попкорн не заканчивается", "shape-circle"),
+        createAchievement(250, "Охотник за титрами", "shape-diamond"),
+        createAchievement(500, "Повелитель плейлиста", "shape-hexagon"),
+        createAchievement(1000, "Голос народа", "shape-circle"),
+        createAchievement(2500, "Лампочка", "shape-diamond"),
+        createAchievement(5000, "Алхимик рекомендаций", "shape-hexagon"),
+        createAchievement(10000, "Спойлер, стой!", "shape-circle"),
+        createAchievement(25000, "Режиссёрская версия", "shape-diamond"),
+        createAchievement(50000, "Хранитель архива", "shape-hexagon"),
+        createAchievement(100000, "Снайпер мема", "shape-circle"),
+        createAchievement(250000, "Киномарафон 24/7", "shape-diamond"),
+        createAchievement(500000, "Слепая дегустация", "shape-hexagon"),
+        createAchievement(1000000, "Культурный посол", "shape-circle"),
+        createAchievement(2500000, "Свидетель эпохи VHS", "shape-diamond"),
+        createAchievement(5000000, "Повелитель лонгридов", "shape-circle"),
+        createAchievement(10000000, "Человек-рекомендация", "shape-diamond"),
+        createAchievement(25000000, "Стенографист титров", "shape-hexagon"),
+        createAchievement(50000000, "Хроникёр вселенной", "shape-circle"),
+        createAchievement(100000000, "Смотрящий", "shape-diamond")
     ],
     anime: [
-        { m: 10,    name: "Отаку I",   shape: "shape-hexagon",  color: "color-3" },
-        { m: 25,    name: "Отаку II",  shape: "shape-circle",   color: "color-1" },
-        { m: 50,    name: "Сенпай",    shape: "shape-diamond",  color: "color-4" },
-        { m: 100,   name: "Ками",      shape: "shape-hexagon",  color: "color-2" },
-        { m: 250,   name: "Ниндзя",    shape: "shape-circle",   color: "color-3" },
-        { m: 500,   name: "Шиноби",    shape: "shape-diamond",  color: "color-1" },
-        { m: 1000,  name: "Хикари",    shape: "shape-hexagon",  color: "color-4" },
-        { m: 2500,  name: "Хикари-полуБог", shape: "shape-circle",   color: "color-2" },
-        { m: 5000,  name: "Хикари-Бог",     shape: "shape-diamond",  color: "color-3" },
-        { m: 10000, name: "Мастерский",    shape: "shape-hexagon",  color: "color-1" },
-        { m: 25000, name: "Легендарный",   shape: "shape-circle",   color: "color-4" },
-        { m: 50000, name: "Эпохальный",    shape: "shape-diamond",  color: "color-2" },
-        { m: 100000,name: "Мифический",       shape: "shape-hexagon",  color: "color-3" },
-        { m: 250000,name: "Вечный",  shape: "shape-circle",   color: "color-1" },
-        { m: 500000,name: "Бессмертный",shape: "shape-diamond",  color: "color-4" },
-        { m: 1000000,name: "Попаданец",  shape: "shape-hexagon",  color: "color-2" }
+        createAchievement(10, "Чунибьё I", "shape-hexagon"),
+        createAchievement(25, "Чунибьё II", "shape-circle"),
+        createAchievement(50, "Сейлор-фуку", "shape-diamond"),
+        createAchievement(100, "Меха-пилот", "shape-hexagon"),
+        createAchievement(250, "Шинсенгуми", "shape-circle"),
+        createAchievement(500, "Ёкай", "shape-diamond"),
+        createAchievement(1000, "Сёнэн-чемпион", "shape-hexagon"),
+        createAchievement(2500, "Сёнэн-полудемон", "shape-circle"),
+        createAchievement(5000, "Сёнэн-демон", "shape-diamond"),
+        createAchievement(10000, "Крушитель миров", "shape-hexagon"),
+        createAchievement(25000, "Истребитель демонов", "shape-circle"),
+        createAchievement(50000, "Сверхъестественный", "shape-diamond"),
+        createAchievement(100000, "Крушитель титанов", "shape-hexagon"),
+        createAchievement(250000, "Король титанов", "shape-circle"),
+        createAchievement(500000, "Берсерк", "shape-diamond"),
+        createAchievement(1000000, "Попаданец", "shape-hexagon")
     ],
     films: [
-        { m: 10,    name: "Киноман I", shape: "shape-diamond",  color: "color-4" },
-        { m: 25,    name: "Киноман II",shape: "shape-circle",   color: "color-1" },
-        { m: 50,    name: "Критик",    shape: "shape-hexagon",  color: "color-2" },
-        { m: 100,   name: "Режиссер",  shape: "shape-diamond",  color: "color-3" },
-        { m: 250,   name: "Актер",     shape: "shape-circle",   color: "color-4" },
-        { m: 500,   name: "Голливуд",  shape: "shape-hexagon",  color: "color-1" },
-        { m: 1000,  name: "Звезда",    shape: "shape-diamond",  color: "color-2" },
-        { m: 2500,  name: "Оскар",     shape: "shape-circle",   color: "color-3" },
-        { m: 5000,  name: "Легендарный",   shape: "shape-hexagon",  color: "color-4" },
-        { m: 10000, name: "Мастерский",    shape: "shape-diamond",  color: "color-1" },
-        { m: 25000, name: "Титанический",     shape: "shape-circle",   color: "color-2" },
-        { m: 50000, name: "Божественный",       shape: "shape-hexagon",  color: "color-3" },
-        { m: 100000,name: "Мифический",       shape: "shape-diamond",  color: "color-4" },
-        { m: 250000,name: "Эпохальный",     shape: "shape-circle",   color: "color-1" },
-        { m: 500000,name: "Вечный",  shape: "shape-hexagon",  color: "color-2" },
-        { m: 1000000,name: "Терминатор",  shape: "shape-diamond",  color: "color-3" }
+        createAchievement(10, "Попкорн I", "shape-diamond"),
+        createAchievement(25, "Попкорн II", "shape-circle"),
+        createAchievement(50, "Киномеханик", "shape-hexagon"),
+        createAchievement(100, "Сценарист", "shape-diamond"),
+        createAchievement(250, "Монтажер", "shape-circle"),
+        createAchievement(500, "Сандэнс", "shape-hexagon"),
+        createAchievement(1000, "Премьера", "shape-diamond"),
+        createAchievement(2500, "Золотая пальмовая ветвь", "shape-circle"),
+        createAchievement(5000, "Мастер пленки", "shape-hexagon"),
+        createAchievement(10000, "Золотой век", "shape-diamond"),
+        createAchievement(25000, "Новая волна", "shape-circle"),
+        createAchievement(50000, "Авторское кино", "shape-hexagon"),
+        createAchievement(100000, "Каннская легенда", "shape-diamond"),
+        createAchievement(250000, "Эпоха блокбастеров", "shape-circle"),
+        createAchievement(500000, "Золотой фонд", "shape-hexagon"),
+        createAchievement(1000000, "Фродо", "shape-diamond")
     ],
     series: [
-        { m: 10,    name: "Серийный I",shape: "shape-hexagon",  color: "color-2" },
-        { m: 25,    name: "Серийный II",shape: "shape-circle",   color: "color-4" },
-        { m: 50,    name: "Марафонец", shape: "shape-diamond",  color: "color-1" },
-        { m: 100,   name: "Binge",     shape: "shape-hexagon",  color: "color-3" },
-        { m: 250,   name: "Экспертный",   shape: "shape-circle",   color: "color-2" },
-        { m: 500,   name: "Мастерский",   shape: "shape-diamond",  color: "color-4" },
-        { m: 1000,  name: "Легендарный",   shape: "shape-hexagon",  color: "color-1" },
-        { m: 2500,  name: "Титанический",     shape: "shape-circle",   color: "color-3" },
-        { m: 5000,  name: "Божественный",       shape: "shape-diamond",  color: "color-2" },
-        { m: 10000, name: "Мифический",       shape: "shape-hexagon",  color: "color-4" },
-        { m: 25000, name: "Эпохальный",     shape: "shape-circle",   color: "color-1" },
-        { m: 50000, name: "Вечный",  shape: "shape-diamond",  color: "color-3" },
-        { m: 100000,name: "Абсолютный",   shape: "shape-hexagon",  color: "color-2" },
-        { m: 250000,name: "Бессмертный",shape: "shape-circle",   color: "color-4" },
-        { m: 500000,name: "Трансцендентный",     shape: "shape-diamond",  color: "color-1" },
-        { m: 1000000,name: "Lost",shape: "shape-hexagon",  color: "color-3" }
+        createAchievement(10, "Зритель I", "shape-hexagon"),
+        createAchievement(25, "Зритель II", "shape-circle"),
+        createAchievement(50, "Запойный", "shape-diamond"),
+        createAchievement(100, "Спойлер, стой!", "shape-hexagon"),
+        createAchievement(250, "Клиффхэнгер", "shape-circle"),
+        createAchievement(500, "Фанат теорий", "shape-diamond"),
+        createAchievement(1000, "Сюжетный поворот", "shape-hexagon"),
+        createAchievement(2500, "Сценарная комната", "shape-circle"),
+        createAchievement(5000, "Шоураннер", "shape-diamond"),
+        createAchievement(10000, "Вселенная сериала", "shape-hexagon"),
+        createAchievement(25000, "Кроссовер", "shape-circle"),
+        createAchievement(50000, "Спин-офф", "shape-diamond"),
+        createAchievement(100000, "Финал сезона", "shape-hexagon"),
+        createAchievement(250000, "Закрытый на пике", "shape-circle"),
+        createAchievement(500000, "Вечная франшиза", "shape-diamond"),
+        createAchievement(1000000, "Lost", "shape-hexagon")
     ],
     shows: [
-        { m: 10,    name: "Зритель I",  shape: "shape-diamond",  color: "color-2" },
-        { m: 25,    name: "Зритель II",shape: "shape-hexagon",  color: "color-4" },
-        { m: 50,    name: "Шоумен",   shape: "shape-circle",   color: "color-1" },
-        { m: 100,   name: "Звездный",   shape: "shape-diamond",  color: "color-3" },
-        { m: 250,   name: "Мастерский",   shape: "shape-hexagon",  color: "color-4" },
-        { m: 500,   name: "Титанический",    shape: "shape-circle",   color: "color-2" },
-        { m: 1000,  name: "Легендарный",   shape: "shape-diamond",  color: "color-1" },
-        { m: 2500,  name: "Божественный",       shape: "shape-hexagon",  color: "color-3" },
-        { m: 5000,  name: "Мифический",       shape: "shape-circle",   color: "color-4" },
-        { m: 10000, name: "Эпохальный",     shape: "shape-diamond",  color: "color-2" },
-        { m: 25000, name: "Вечный",  shape: "shape-hexagon",  color: "color-1" },
-        { m: 50000, name: "Абсолютный",   shape: "shape-circle",   color: "color-3" },
-        { m: 100000,name: "Бессмертный",shape: "shape-diamond",  color: "color-4" },
-        { m: 250000,name: "Вселенная",     shape: "shape-hexagon",  color: "color-1" },
-        { m: 500000,name: "Трансцендентный", shape: "shape-circle",   color: "color-2" },
-        { m: 1000000,name: "ШПАМ", shape: "shape-diamond",  color: "color-3" }
+        createAchievement(10, "В зале I", "shape-diamond"),
+        createAchievement(25, "В зале II", "shape-hexagon"),
+        createAchievement(50, "Аплодирую стоя", "shape-circle"),
+        createAchievement(100, "В эфире", "shape-diamond"),
+        createAchievement(250, "Звезда экрана", "shape-hexagon"),
+        createAchievement(500, "Хедлайнер", "shape-circle"),
+        createAchievement(1000, "Мастер сцены", "shape-diamond"),
+        createAchievement(2500, "Король импровизации", "shape-hexagon"),
+        createAchievement(5000, "Человек-оркестр", "shape-circle"),
+        createAchievement(10000, "Золотой состав", "shape-diamond"),
+        createAchievement(25000, "Прайм-тайм", "shape-hexagon"),
+        createAchievement(50000, "Суперигра", "shape-circle"),
+        createAchievement(100000, "Бессменный ведущий", "shape-diamond"),
+        createAchievement(250000, "Голубой огонек", "shape-hexagon"),
+        createAchievement(500000, "Национальное достояние", "shape-circle"),
+        createAchievement(1000000, "ШПАМ", "shape-diamond")
     ],
     letsplays: [
-        { m: 10,    name: "Геймер I",  shape: "shape-hexagon",  color: "color-4" },
-        { m: 25,    name: "Геймер II",shape: "shape-circle",   color: "color-1" },
-        { m: 50,    name: "Стример",   shape: "shape-diamond",  color: "color-2" },
-        { m: 100,   name: "Профи",    shape: "shape-hexagon",  color: "color-3" },
-        { m: 250,   name: "Мастерский",   shape: "shape-circle",   color: "color-4" },
-        { m: 500,   name: "Легендарный",   shape: "shape-diamond",  color: "color-1" },
-        { m: 1000,  name: "Титанический",     shape: "shape-hexagon",  color: "color-2" },
-        { m: 2500,  name: "Божественный",       shape: "shape-circle",   color: "color-3" },
-        { m: 5000,  name: "Мифический",       shape: "shape-diamond",  color: "color-4" },
-        { m: 10000, name: "Эпохальный",     shape: "shape-hexagon",  color: "color-1" },
-        { m: 25000, name: "Вечный",  shape: "shape-circle",   color: "color-2" },
-        { m: 50000, name: "Абсолютный",   shape: "shape-diamond",  color: "color-3" },
-        { m: 100000,name: "Бессмертный",shape: "shape-hexagon",  color: "color-4" },
-        { m: 250000,name: "Вселенная",     shape: "shape-circle",   color: "color-1" },
-        { m: 500000,name: "Трансцендентный", shape: "shape-diamond",  color: "color-2" },
-        { m: 1000000,name: "Куплинов",  shape: "shape-hexagon",  color: "color-3" }
+        createAchievement(10, "Зритель I", "shape-hexagon"),
+        createAchievement(25, "Зритель II", "shape-circle"),
+        createAchievement(50, "В гостях у Куплинова", "shape-diamond"),
+        createAchievement(100, "Дэвид Блэйд", "shape-hexagon"),
+        createAchievement(250, "Кот под рукой", "shape-circle"),
+        createAchievement(500, "Поймал эмоцию", "shape-diamond"),
+        createAchievement(1000, "Дед", "shape-hexagon"),
+        createAchievement(2500, "Повар", "shape-circle"),
+        createAchievement(5000, "Гений", "shape-diamond"),
+        createAchievement(10000, "Кибердемон", "shape-hexagon"),
+        createAchievement(25000, "Ламповый вечер", "shape-circle"),
+        createAchievement(50000, "Культ Куплинова", "shape-diamond"),
+        createAchievement(100000, "Легенда кухни", "shape-hexagon"),
+        createAchievement(250000, "Вечный стрим", "shape-circle"),
+        createAchievement(500000, "Абсолютный Блэйд", "shape-diamond"),
+        createAchievement(1000000, "Двойник Куплинова", "shape-hexagon")
     ]
 };

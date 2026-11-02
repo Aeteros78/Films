@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Media Tracker</title>
-    <!-- Подключаем ваш CSS -->
+    <!-- Подключаем ваш CSS (убедитесь, что файл называется style.css) -->
     <link rel="stylesheet" href="styles.css">
     <!-- Подключаем Chart.js для графиков -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
     <div class="app-container">
         <!-- SIDEBAR: Левая панель -->
         <aside class="sidebar">
@@ -22,7 +21,7 @@
             <!-- Контейнер для динамических категорий (сюда JS вставит кнопки Аниме, Фильмы и т.д.) -->
             <div id="sidebar-categories"></div>
         </aside>
-
+        
         <!-- MAIN CONTENT: Центральная часть -->
         <main class="main-content">
             
@@ -32,7 +31,7 @@
                     <!-- Сюда JS вставит карточки -->
                 </div>
             </div>
-
+            
             <!-- VIEW 2: Таблица с деталями (скрыта по умолчанию) -->
             <div id="table-view" class="hidden">
                 <button class="menu-item" onclick="showAllCards()" style="margin-bottom: 10px;">← Назад</button>
@@ -58,23 +57,20 @@
                     </div>
                 </div>
             </div>
-
         </main>
-
+        
         <!-- STATS SIDEBAR: Правая панель -->
         <aside class="stats-sidebar">
             <div class="stats-card total">
                 <h3>Общее время</h3>
                 <div id="total-time-all">0ч. 0м.</div>
             </div>
-
             <div class="stats-card">
                 <h3>Статистика по категориям</h3>
                 <div id="stats-list">
                     <!-- Сюда JS вставит статистику -->
                 </div>
             </div>
-
             <div class="stats-card">
                 <div class="chart-controls">
                     <button onclick="updateChart('hours')">Часы</button>
@@ -85,7 +81,7 @@
             </div>
         </aside>
     </div>
-
+    
     <!-- FOOTER: Панель достижений (внизу экрана) -->
     <footer class="achievements-footer">
         <div class="achievements-header" onclick="toggleAchievements()">
@@ -98,7 +94,7 @@
             </div>
         </div>
     </footer>
-
+    
     <!-- MODAL: Окно описания сюжета -->
     <div id="modal" class="modal" onclick="closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -107,9 +103,8 @@
             <button class="close-btn" onclick="closeModal()">Закрыть</button>
         </div>
     </div>
-
+    
     <!-- ПОДКЛЮЧЕНИЕ СКРИПТА (ОБЯЗАТЕЛЬНО type="module") -->
     <script type="module" src="script.js"></script>
-
 </body>
 </html>

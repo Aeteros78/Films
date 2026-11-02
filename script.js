@@ -8,7 +8,6 @@ import { achievementSets } from './data/achievements.js';
 
 // 2. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 var myChart = null;
-
 var database = {
     anime: animeData,
     films: filmsData,
@@ -16,7 +15,6 @@ var database = {
     shows: showsData,
     letsplays: letsplaysData
 };
-
 var cardsGrid = document.getElementById('cards-grid');
 var cardsView = document.getElementById('cards-view');
 var tableView = document.getElementById('table-view');
@@ -28,7 +26,6 @@ var catAchContainer = document.getElementById('achievements-container');
 var sidebarCategories = document.getElementById('sidebar-categories');
 
 // 3. ОСНОВНЫЕ ФУНКЦИИ
-
 function init() {
     renderCards();
     updateGlobalStats();
@@ -39,8 +36,6 @@ function init() {
 function renderSidebar() {
     if (!sidebarCategories) return;
     sidebarCategories.innerHTML = ''; 
-
-    // ИСПОЛЬЗУЕМ let вместо var для key
     for (let key in database) {
         let category = database[key];
         let btn = document.createElement('div');
@@ -52,7 +47,6 @@ function renderSidebar() {
             allButtons.forEach(function(b) {
                 b.classList.remove('active');
             });
-
             btn.classList.add('active');
             showCategoryDetails(key);
         };
@@ -61,18 +55,22 @@ function renderSidebar() {
     }
 }
 
+// ==========================================
+// ИЗМЕНЕННАЯ ФУНКЦИЯ РЕНДЕРИНГА ДОСТИЖЕНИЙ
+// ==========================================
 function renderAchievements() {
     if (!catAchContainer) return;
     catAchContainer.innerHTML = ''; 
-
+    
+    // 1. Глобальные достижения
     var globalSection = document.createElement('div');
     globalSection.className = 'achievements-section';
     globalSection.innerHTML = '<h3 class="ach-title">🏆 Общие достижения</h3><div class="achievements-row" id="grid-global"></div>';
     catAchContainer.appendChild(globalSection);
     
     renderAchItems(document.getElementById('grid-global'), achievementSets.global, calculateGlobalHours());
-
-    // ИСПОЛЬЗУЕМ let вместо var для key
+    
+    // 2. Достижения по категориям
     for (let key in database) {
         var section = document.createElement('div');
         section.className = 'achievements-section';
@@ -86,29 +84,47 @@ function renderAchievements() {
     }
 }
 
+// ==========================================
+// ГЛАВНОЕ ИЗМЕНЕНИЕ: renderAchItems
+// ==========================================
 function renderAchItems(container, achList, currentHours) {
     if (!container || !achList) return;
+    
     for (let i = 0; i < achList.length; i++) {
         var ach = achList[i];
         var div = document.createElement('div');
         var isUnlocked = currentHours >= ach.m;
         
+        // Формируем классы: базовый + форма + статус
+        // Убрали ach.color, так как цвет теперь задается стилями
         var classList = 'achievement ' + ach.shape;
         if (isUnlocked) {
-            classList += ' unlocked ' + ach.color;
+            classList += ' unlocked';
+        } else {
+            classList += ' locked';
         }
         
         div.className = classList;
+        
+        // Применяем сгенерированные цвета из JS (если разблокировано)
+        if (isUnlocked && ach.style) {
+            div.style.background = ach.style.background;
+            div.style.boxShadow = ach.style.boxShadow;
+            div.style.borderColor = ach.style.borderColor;
+        }
+
+        // Добавляем текст
         div.innerHTML = '<span class="name">' + ach.name + '</span>' +
                         '<span class="cond">' + formatNumber(ach.m) + ' ч.</span>';
+        
         container.appendChild(div);
     }
 }
+// ==========================================
 
 function renderCards() {
     if (!cardsGrid) return;
     cardsGrid.innerHTML = '';
-    // ИСПОЛЬЗУЕМ let вместо var для key
     for (let key in database) {
         let val = database[key];
         let mins = calculateMins(val.data);
@@ -133,7 +149,6 @@ function showCategoryDetails(key) {
         let rowClass = 'row-high', rText = 'Обязательно';
         if (r < 4) { rowClass = 'row-low'; rText = 'Нежелательно'; }
         else if (r < 7) { rowClass = 'row-mid'; rText = 'Желательно'; }
-
         var tr = document.createElement('tr');
         tr.className = rowClass;
         tr.innerHTML = '<td>' + item.name + '</td><td>' + item.eps + '</td><td>' + item.dur + '</td>' +
@@ -152,7 +167,6 @@ function showCategoryDetails(key) {
 function showAllCards() {
     cardsView.classList.remove('hidden');
     tableView.classList.add('hidden');
-
     if (sidebarCategories) {
         var allButtons = sidebarCategories.querySelectorAll('.menu-item');
         allButtons.forEach(function(b) {
@@ -164,7 +178,6 @@ function showAllCards() {
 function updateGlobalStats() {
     var grandTotalMins = 0;
     if (statsList) statsList.innerHTML = '';
-    // ИСПОЛЬЗУЕМ let вместо var для key
     for (let key in database) {
         let val = database[key];
         let mins = calculateMins(val.data);
@@ -181,10 +194,8 @@ function updateGlobalStats() {
 }
 
 // 4. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-
 function calculateGlobalHours() {
     var total = 0;
-    // ИСПОЛЬЗУЕМ let вместо var для key
     for (let key in database) total += calculateMins(database[key].data) / 60;
     return total;
 }
@@ -207,10 +218,8 @@ function initChart(unit) {
     var ctx = document.getElementById('statsChart').getContext('2d');
     if (myChart) myChart.destroy();
     var labels = [];
-    // ИСПОЛЬЗУЕМ let вместо var для key
     for (let k in database) { labels.push(database[k].title); }
     var dataValues = [];
-    // ИСПОЛЬЗУЕМ let вместо var для key
     for (let k in database) {
         var m = calculateMins(database[k].data);
         if (unit === 'hours') dataValues.push(m / 60);
@@ -232,11 +241,14 @@ function initChart(unit) {
 }
 
 function updateChart(unit) { initChart(unit); }
+
 function openPlot(text) { 
-    document.getElementById('modal-text').innerHTML = text; // Используем innerHTML
+    document.getElementById('modal-text').innerHTML = text;
     document.getElementById('modal').style.display = 'flex'; 
 }
+
 function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
 function toggleAchievements() {
     var footer = document.querySelector('.achievements-footer');
     if (footer) footer.classList.toggle('expanded');
